@@ -1,0 +1,1 @@
+workon: python ./main.py
