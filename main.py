@@ -186,4 +186,4 @@ async def delete(ctx, name=''):
 
 conn.commit()
 
-bot.run('ODM1OTQyNjY5MzkzMDY4MDMy.YIWyRw.gnGP2BCfJ9xjUJ-iPXw6IVyNJ8A')
+bot.run(token)
