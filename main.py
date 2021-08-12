@@ -2,7 +2,7 @@ import psycopg2
 import discord
 from discord.ext.commands import Bot, when_mentioned_or
 
-
+SUPER_USERS=[759026765976567810]
 
 bot = Bot(description="Pdf Library", command_prefix=when_mentioned_or(">"), help_command=None )
 conn = psycopg2.connect(dbname="postgres" , user="postgres" , password="p@ssword")
@@ -53,14 +53,80 @@ def find_sem(q_year, q_sem):
 
 
 def del_book(name):
-    cur.execute("SELECT FROM book WHERE name=%s OR short_name=%s", (name.lower(),name.lower()))
-    if cur.fetchall()=='':
+    cur.execute("SELECT * FROM book WHERE name=%s OR short_name=%s", (name.lower(),name.lower()))
+    if cur.fetchall()==[]:
         return "book not found"
+    
     cur.execute("DELETE FROM book WHERE name=%s OR short_name=%s", (name.lower(),name.lower()))
     conn.commit()
     return "book deleted"
 
 #---------------------------------------------------------------------------------------------|
+
+def help_search(s): #---------------------
+    disc = '''
+The search command searches the book for you.
+It takes the name of the book to search. 
+
+`>search book_name`
+
+Example:
+
+```>search dm
+>search "Discrete Math"```
+    
+    '''
+    s.add_field(name=disc , value='\nFarewell', inline=False)
+    return s
+
+def help_semister(s): #---------------------
+    disc = '''
+The semister command provides you all the book for the semister.
+Your have to tell him which year and which semister's book do you want.
+
+`>semister year semister`
+
+Example:
+
+```>semister 1 2
+>semister 2 1```
+    '''
+    s.add_field(name=disc , value='\nFarewell', inline=False)
+    return s
+
+def help_add(s): #---------------------
+    disc = '''
+The add command is admin only command. This command is for 
+adding book in the database.
+
+```>add   book_name     short_name      download_link  year semister```
+    
+Example:
+   
+```>addBook "Thomas Calculus" Calculus https://t.me/sustcse2019/10 1 2```
+
+    '''
+
+    s.add_field(name=disc , value='\nFarewell', inline=False)
+    return s
+
+def help_delete(s): #---------------------
+    disc = '''
+The delete command is admin only command. Used for deleting book from
+database
+
+`>delete book_name`
+
+Example:
+
+```>delete Matrix```
+
+    '''
+
+    s.add_field(name=disc , value='\nFarewell', inline=False)
+    return s
+
+#--------------------------------------------------
 
 @bot.event
 async def on_ready():
@@ -70,50 +136,46 @@ async def on_ready():
 
 @bot.command()
 async def help(ctx, name=''):
-    if name=='':
-        await ctx.channel.send('''```
-    Hello I'm Book Tracker. 
-    I track book for u ^_^.
+    s = discord.Embed(title='All Command Guide', color=0x008000)
+    s.set_author(name="Book-Trackerr\n", icon_url=ctx.me.avatar_url)
 
-    Here are the command Lists
+    if name=='search':
+        s = discord.Embed(title='Search Command Guide', color=0x008000)
+        help_search(s)
+    elif name=='semister':
+        s = discord.Embed(title='Semister Command Guide', color=0x008000)
+        help_semister(s)
+    elif name=='add':
+        s = discord.Embed(title='Add Command Guide', color=0x008000)
+        help_add(s)
+    elif name=='delete':
+        s = discord.Embed(title='Delete Command Guide', color=0x008000)
+        help_delete(s)
+    else:
+        disc = '''
+There are 4 basic command 
 
-    >search  
-    >semister
-    >add
-    >delete
+`search`
+`semister`
+`add`
+`delete`
 
-    The search command command search the book for you. 
-    Syntax : >search book_name
-    
-        >search DS
-        >search Ds
-        >search "Data Structure"
+The last 2 are admin only command. That mean only the admin can use these command.
+To know specific command details, type `>help command_name` 
+            '''
 
-    The semister command provides you all the book for the semister.
-    Syntax : >semister year semister
+        s.add_field(name=disc , value='\nFarewell', inline=False)
 
-        >semister 1 2
-        >semister 2 1
-
-    The add command is admin only command.
-    Syntax : >add book_name short_name telegram_link year semister
-
-        >addBook "Thomas Calculus" Calculus https://t.me/sustcse2019/10 1 2
-
-    The delete command is also admin only command.
-    Syntax : >delete book_name
-
-        >delete Matrix
-
-    Enjoy....................................
-        ```''')
+    await ctx.channel.send(embed=s)
 
 
 @bot.command()
 async def search(ctx, name=''):
 
     if name=='':
-        await ctx.channel.send('Help msz for search command')
+        s = discord.Embed(title='Search Command Guide', color=0x008000)
+        s.set_author(name="Book-Trackerr\n", icon_url=ctx.me.avatar_url)
+        await ctx.channel.send(embed=help_search(s))
         return
 
     s = discord.Embed(description='', color=0x008000)
@@ -132,8 +194,11 @@ async def search(ctx, name=''):
 
 @bot.command()
 async def semister(ctx, year='0', sem='0'):
+
     if year=='0' or (year<'0' or year>'4') or(sem<'0' or sem>'2'):
-        await ctx.channel.send('wrong search')
+        s = discord.Embed(title='Semister Command Guide', color=0x008000)
+        s.set_author(name="Book-Trackerr\n", icon_url=ctx.me.avatar_url)
+        await ctx.channel.send(embed=help_semister(s))
         return
 
     info = find_sem(int(year),int(sem))
@@ -149,7 +214,7 @@ async def semister(ctx, year='0', sem='0'):
     if(sem=='1'):sm='1st'
     elif(sem=='2'):sm='2nd'
 
-    s = discord.Embed(description=f"\n\n```The books for {yr}-year {sm}-semister```\n", color=0x008000)
+    s = discord.Embed(title=f"\n\nThe books for {yr}-year {sm}-semister\n", color=0x008000)
     s.set_author(name="Book-Trackerr\n", icon_url=ctx.me.avatar_url)
 
     if(info==[]):
@@ -166,23 +231,31 @@ async def semister(ctx, year='0', sem='0'):
 
 @bot.command()
 async def add(ctx, name='',short_name='', tel_link='', year=0,sem=0):
-	if name==''or short_name==''or  tel_link=='' or  year==0 or sem==0:
-		await ctx.channel.send('insufficient information')
-	elif ctx.author.id == 759026765976567810:
-		add_book(name,short_name,tel_link,year,sem)
-		await ctx.channel.send('Book added')
-	else:
-		await ctx.channel.send('This command is for admin only')
+
+    if name=='' or short_name=='' or tel_link=='' or year==0 or sem==0:
+        s = discord.Embed(title='Add Command Guide', color=0x008000)
+        s.set_author(name="Book-Trackerr\n", icon_url=ctx.me.avatar_url)
+        await ctx.channel.send( embed=help_add(s) )
+
+    elif ctx.author.id in SUPER_USERS:
+        add_book(name,short_name,tel_link,year,sem)
+        await ctx.channel.send('Book added')
+    else:
+        await ctx.channel.send('This command is for admin only')
 
 @bot.command()
 async def delete(ctx, name=''):
-	if name=='':
-		await ctx.channel.send('insufficient information')
-	elif ctx.author.id == 759026765976567810:
-		await ctx.channel.send(del_book(name))
 
-	else:
-		await ctx.channel.send('This command is for admin only')
+    if name=='':
+        s = discord.Embed(title='Delete Command Guide', color=0x008000)
+        s.set_author(name="Book-Trackerr\n", icon_url=ctx.me.avatar_url)
+        await ctx.channel.send(embed=help_delete(s))
+
+    elif ctx.author.id in SUPER_USERS:
+        await ctx.channel.send(del_book(name))
+
+    else:
+        await ctx.channel.send('This command is for admin only')
 
 conn.commit()
 
