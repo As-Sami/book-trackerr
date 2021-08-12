@@ -1,2 +1,4 @@
 # book-trackerr
-MAking a DisCord BoT
+main.py is the only code to run this bot..   
+
+he other code was to test every thing else
