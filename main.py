@@ -1,13 +1,17 @@
 import psycopg2
 import discord
+from os import environ
 from discord.ext.commands import Bot, when_mentioned_or
+
+# CONSTANTS
+token = environ.get(BOT_TOKEN)
+db_url = environ.get(DATABASE_URL)
 
 SUPER_USERS=[759026765976567810]
 
 bot = Bot(description="Pdf Library", command_prefix=when_mentioned_or(">"), help_command=None )
-conn = psycopg2.connect(dbname="postgres" , user="postgres" , password="p@ssword")
+conn = psycopg2.connect(db_url)
 cur = conn.cursor()
-
 #---------------------------------------------------------------------------------------------|
 
 def cap(s):
