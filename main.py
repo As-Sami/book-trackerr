@@ -13,6 +13,14 @@ bot = Bot(description="Pdf Library", command_prefix=when_mentioned_or(">"), help
 conn = psycopg2.connect(db_url)
 cur = conn.cursor()
 
+cur.execute('''CREATE TABLE IF NOT EXISTS book(
+    name TEXT,
+    short_name TEXT,
+    tel_link TEXT,
+    year INTEGER,
+    semister INTEGER
+    );''')
+
 #---------------------------------------------------------------------------------------------|
 
 def cap(s):
