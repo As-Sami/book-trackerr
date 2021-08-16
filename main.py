@@ -6,7 +6,7 @@ from discord.ext.commands import Bot, when_mentioned_or
 # CONSTANTS
 token = environ.get('BOT_TOKEN')
 db_url = environ.get('DATABASE_URL')
-SUPER_USERS = list(environ.get('SUPER_USERS'))
+SUPER_USERS = list( map(int , environ.get('SUPER_USERS').split(',')) )
 
 # SUPER_USERS=[759026765976567810]
 
