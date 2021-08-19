@@ -31,9 +31,9 @@ of heroku on your browser.
 
 12. Go to settings tab and you will see a section called Config Vars. Click on the reveal config vars button.
 
-13. Now you need to create a config var called BOT_TOKEN_ and paste your bot token created using discord and hit add. 
+13. Now you need to create a config var called **BOT_TOKEN** and paste your bot token created using discord and hit add. You need to add another variable and that is the id for super users (read the description below to know about super user). Create a config val named **SUPER_USERS** and put ids with a comma at middle. (Example: `12345` or `12345,6789,343534`). 
 
-14. Make sure that the name of the config var that contains the database url is named DATABASE_URL.
+14. Make sure that the name of the config var that contains the database url is named **DATABASE_URL**.
 
 15. Now the setup is almost done. Type the following command `git push heroku master -f` and press enter.
 
@@ -48,4 +48,5 @@ of heroku on your browser.
 
 ### Config Vars
 
-BOT_TOKEN : the Discord Bot Token for your bot.
+**BOT_TOKEN** : the Discord Bot Token for your bot.
+**SUPER_USERS** : ids of super users. Super users are those people who can use the add and delete command. To get their id, go to the setting of your discord and then go to Advance and turn on developer mode. Now the person you want to make super user, right click on his profile and you will see a copy `COPY ID`. Just click on the copy `COPY ID` button and you will get the id.
