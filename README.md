@@ -46,7 +46,7 @@ of heroku on your browser.
 19. Enjoy..................................................
 
 
-### Config Vars
+## Config Vars
 
 **BOT_TOKEN** : the Discord Bot Token for your bot.
 **SUPER_USERS** : ids of super users. Super users are those people who can use the add and delete command. To get their id, go to the setting of your discord and then go to Advance and turn on developer mode. Now the person you want to make super user, right click on his profile and you will see a copy `COPY ID`. Just click on the copy `COPY ID` button and you will get the id.
