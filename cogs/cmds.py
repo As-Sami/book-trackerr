@@ -6,7 +6,7 @@ from discord.ext import commands
 from data import dbconn
 
 RESPOND_TIME = 30
-SUPER_USERS = list(environ.get('SUPER_USERS').split(','))
+SUPER_USERS = list( map(int , environ.get('SUPER_USERS').split(',')) )
 
 async def get_info(bot, ctx, msz, time):
 	await ctx.send(msz)
