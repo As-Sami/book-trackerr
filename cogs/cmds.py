@@ -314,7 +314,7 @@ class Cmds(commands.Cog):
 			await ctx.send('This command is for admin only')
 			return
 
-		self.db.add_book(name, aliases, download_link, year, sem)
+		self.db.add_book(name, aliases, link, year, sem)
 		await ctx.send('Book added')
 
 
