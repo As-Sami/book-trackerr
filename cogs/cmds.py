@@ -1,10 +1,12 @@
 import discord
 import asyncio
+import os
+from os import environ
 from discord.ext import commands
 from data import dbconn
 
 RESPOND_TIME = 30
-SUPER_USERS = list( map(int , environ.get('SUPER_USERS').split(',')) )
+SUPER_USERS = list(environ.get('SUPER_USERS').split(','))
 
 async def get_info(bot, ctx, msz, time):
 	await ctx.send(msz)
@@ -201,10 +203,10 @@ class Cmds(commands.Cog):
 			await ctx.channel.send(embed=s)
 			return
 
-		if not (ctx.author.id in SUPER_USERS):
-			await ctx.channel.send('This command is for admin only')
+		if not ctx.author.id in SUPER_USERS:
+			await ctx.send('This command is for admin only')
 			return
-
+		
 		aliases = await get_info(self.client, ctx,"Enter aliace name for this book including commas(,) ", RESPOND_TIME)
 		if aliases=='':
 			await ctx.send("You didn't respond in time.... Operation stopped")
@@ -262,9 +264,10 @@ class Cmds(commands.Cog):
 			return			
 
 
-		if not (ctx.author.id in SUPER_USERS):
-			await ctx.channel.send('This command is for admin only')
+		if not ctx.author.id in SUPER_USERS:
+			await ctx.send('This command is for admin only')
 			return
+		
 
 		s = discord.Embed(description=f"", color=0x008000)
 		s.set_author(name='Found these following books', icon_url=ctx.me.avatar_url)
@@ -307,10 +310,10 @@ class Cmds(commands.Cog):
 
 	@commands.command()
 	async def addf(self, ctx, name, aliases, link, year, sem):
-		if not (ctx.author.id in SUPER_USERS):
-			await ctx.channel.send('This command is for admin only')
+		if not ctx.author.id in SUPER_USERS:
+			await ctx.send('This command is for admin only')
 			return
-			
+
 		self.db.add_book(name, aliases, download_link, year, sem)
 		await ctx.send('Book added')
 

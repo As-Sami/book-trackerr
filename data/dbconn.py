@@ -1,5 +1,6 @@
 import psycopg2
 import os
+from os import environ
 
 db_url = environ.get('DATABASE_URL')
 
