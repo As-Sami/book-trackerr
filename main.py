@@ -10,7 +10,7 @@ db_url = environ.get('DATABASE_URL')
 
 # SUPER_USERS=[759026765976567810]
 
-bot = Bot(description='testing bot' , command_prefix='>', help_command=None)
+bot = Bot(description='Book---TrackeR' , command_prefix='>', help_command=None)
 
 @bot.event
 async def on_ready():
